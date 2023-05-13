@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Spider Pocket Demo</title>
+    <title>SpiderPocket</title>
     <!-- <script src="https://unpkg.com/css-doodle"></script> -->
     <link rel="stylesheet" href="style/main.css">
 
@@ -40,8 +40,11 @@
         </div>
 
         <!-- 发牌按钮 -->
-        <div id="deal-cards" class="deal-cards-btn"></div>   
-        <div id="open-menu" class="open-menu-btn">MENU</div>    
+        <div class="game-btns">
+            <div id="deal-cards" class="deal-cards-btn">Spider Pocket</div>
+            <div id="give-up" class="give-up-btn">Start a New Game</div>
+            <div id="retry" class="retry-btn">Retry this Round</div>
+        </div>
 
         <!-- 光标，这里是小蜘蛛 -->
         <div id="cursor">
@@ -77,20 +80,23 @@
         </div>
 
 
-        <!-- 菜单界面 -->
-        <!-- <div class="menuPanel">
+        <!-- 结束界面 -->
+        <div class="endPanel">
             <div class="panel">
                 <div class="inner">
-                    <h2  id="restart">
-                        <div class="title">NEW GAME</div>
-                    </h2>
-
-                    <h2  id="resumeGame" class="resumeGame">
-                        <div class="title">SHARE</div>
-                    </h2>
+                    <h3>Good Job!</h3>
+                    <p>Your step is: <span id="finalstep"></span> </p>
+                    <!-- <div>
+                        <div>Share this round to your firend:</div>
+                        <div>
+                            <input type="text" readonly value="12345"> <button>copy to clipboard</button>
+                        </div>
+                    </div> -->
+                    <div id="restart-game" class="restart-game-btn">New Game</div>
                 </div>
+
             </div>
-        </div> -->
+        </div>
 
 
         <!-- 用来存放完成的卡牌 -->
