@@ -1523,7 +1523,8 @@ function restartGame() {
     //const r = confirm('Are you sure you want to restart the game?')
     //if(r){
     localStorage.removeItem("gameState");
-    location.reload();
+    JSInterface.showInterstitial();
+    JSInterface.recreate();
     //}
 }
 

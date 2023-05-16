@@ -1,24 +1,18 @@
 package com.spiderpocket.spider_android;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.os.Build;
-import android.os.CountDownTimer;
+import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import com.google.android.gms.ads.*;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
@@ -27,25 +21,23 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Timer;
 
 @SuppressLint("SetTextI18n")
 public class MainActivity extends AppCompatActivity {
 
-    private AdView adView;
-
-    private static final long GAME_LENGTH_MILLISECONDS = 3000;
-    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
     private static final String TAG = "MainActivity";
+    private WebView wv;
 
-    private InterstitialAd interstitialAd;
-    private Button retryButton;
+    private AdView adView;
+    public static final String AD_FULL_SCREEN_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
+    public static final String AD_FULL_WIDTH_UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
+    public static InterstitialAd interstitialAd;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        WebView wv = new WebView(getApplicationContext());
+        wv = new WebView(getApplicationContext());
 
         Window window = getWindow();
         //隐藏标题栏
@@ -103,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
         //setContentView(wv);
     }
 
-
     //生命周期结束时销毁AdView实例，以避免内存泄漏
     @Override
     protected void onDestroy() {
@@ -130,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
         adView = new AdView(this);
         adView.setAdSize(new AdSize(AdSize.FULL_WIDTH, 50));
-        adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+        adView.setAdUnitId(AD_FULL_WIDTH_UNIT_ID);
         // 将视图添加到WebView的最底部
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -167,38 +158,15 @@ public class MainActivity extends AppCompatActivity {
 
         loadAd();
 
-        //wv.addJavascriptInterface("");
-        // Create the "retry" button, which tries to show an interstitial between game plays.
-        retryButton = new Button(this);
-        retryButton.setText("重新开始游戏");
-        retryButton.setWidth(200);
-        retryButton.setHeight(200);
-        retryButton.setVisibility(View.INVISIBLE);
-        retryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showInterstitial();
-            }
-        });
-
         // 创建一个 RelativeLayout 对象
         RelativeLayout relativeLayout = new RelativeLayout(this);
         RelativeLayout.LayoutParams wvLayoutParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT
         );
-        //relativeLayout.addView(timer,wvLayoutParams);
         relativeLayout.addView(wv, wvLayoutParams);
 
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
-        );
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-        relativeLayout.addView(retryButton, layoutParams);
-
-        startGame();
-
+        wv.addJavascriptInterface(new JSInterface(), "JSInterface");
         setContentView(relativeLayout);
     }
 
@@ -206,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
         AdRequest adRequest = new AdRequest.Builder().build();
         InterstitialAd.load(
                 this,
-                AD_UNIT_ID,
+                AD_FULL_SCREEN_UNIT_ID,
                 adRequest,
                 new InterstitialAdLoadCallback() {
                     @Override
@@ -276,8 +244,30 @@ public class MainActivity extends AppCompatActivity {
         if (interstitialAd == null) {
             loadAd();
         }
+    }
 
-        retryButton.setVisibility(View.VISIBLE);
+    private final class JSInterface {
+        @JavascriptInterface
+        public void showInterstitial() {
+            wv.post(new Runnable() {
+                @Override
+                public void run() {
+                    MainActivity.this.showInterstitial();
+                }
+            });
+        }
+
+        @JavascriptInterface
+        public void recreate() {
+            wv.post(new Runnable() {
+                @Override
+                public void run() {
+                    wv.reload();
+                }
+            });
+        }
     }
 
 }
+
+
