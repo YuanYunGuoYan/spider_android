@@ -29,8 +29,14 @@ public class MainActivity extends AppCompatActivity {
     private WebView wv;
 
     private AdView adView;
-    public static final String AD_FULL_SCREEN_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
-    public static final String AD_FULL_WIDTH_UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
+
+    // Prd Ad
+    public static final String AD_FULL_SCREEN_UNIT_ID = "ca-app-pub-9271167210149481/7872631214";
+    public static final String AD_FULL_WIDTH_UNIT_ID = "ca-app-pub-9271167210149481/9354994031";
+
+    // Test Ad
+    //public static final String AD_FULL_SCREEN_UNIT_ID = "ca-app-pub-3940256099942544/1033173712";
+    //public static final String AD_FULL_WIDTH_UNIT_ID = "ca-app-pub-3940256099942544/6300978111";
     public static InterstitialAd interstitialAd;
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -182,8 +188,8 @@ public class MainActivity extends AppCompatActivity {
                         // The mInterstitialAd reference will be null until
                         // an ad is loaded.
                         MainActivity.this.interstitialAd = interstitialAd;
-                        Log.i(TAG, "onAdLoaded");
-                        Toast.makeText(MainActivity.this, "onAdLoaded()", Toast.LENGTH_SHORT).show();
+                        //Log.i(TAG, "onAdLoaded");
+                        //Toast.makeText(MainActivity.this, "onAdLoaded()", Toast.LENGTH_SHORT).show();
                         interstitialAd.setFullScreenContentCallback(
                                 new FullScreenContentCallback() {
                                     @Override
@@ -222,9 +228,7 @@ public class MainActivity extends AppCompatActivity {
                                 String.format(
                                         "domain: %s, code: %d, message: %s",
                                         loadAdError.getDomain(), loadAdError.getCode(), loadAdError.getMessage());
-                        Toast.makeText(
-                                        MainActivity.this, "onAdFailedToLoad() with error: " + error, Toast.LENGTH_SHORT)
-                                .show();
+                        //Toast.makeText(MainActivity.this, "onAdFailedToLoad() with error: " + error, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -234,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
         if (interstitialAd != null) {
             interstitialAd.show(this);
         } else {
-            Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Ad did not load", Toast.LENGTH_SHORT).show();
             startGame();
         }
     }
